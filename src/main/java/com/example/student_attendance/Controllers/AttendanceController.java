@@ -19,10 +19,25 @@ public class AttendanceController {
     // ... (Method POST addAttendance TETAP SAMA, tidak perlu diubah) ...
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> addAttendance(@RequestBody Map<String, Object> payload) {
-        // Copy paste kode addAttendance Anda yang lama disini (tidak ada perubahan)
-        // ...
-        // Agar tidak panjang, saya skip tulis ulang, pakai yg lama saja.
-        return null; // (Hapus baris ini dan pakai kode lama Anda)
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Long studentId = Long.parseLong(payload.get("student_id").toString());
+            String keterangan = payload.get("keterangan").toString();
+
+            // Panggil Service
+            String message = attendanceService.addAttendance(studentId, keterangan);
+
+            response.put("status", "success");
+            response.put("message", message);
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            // Menangkap error dari Service (misal: sudah absen atau siswa tidak ada)
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @GetMapping("/history/{studentId}")

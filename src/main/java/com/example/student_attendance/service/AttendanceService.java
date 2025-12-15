@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 @Service
 public class AttendanceService {
@@ -24,7 +24,6 @@ public class AttendanceService {
     private StudentRepo studentRepo;
 
     // --- HELPER METHOD (Fungsi Bantuan) ---
-    // Fungsi ini tugasnya mengubah data Absensi asli menjadi Map yang bersih (Tanpa ID)
     private Map<String, Object> convertToDto(Student_Attendance absen) {
         Map<String, Object> data = new HashMap<>();
         // Kita PILIH field mana saja yang mau ditampilkan
