@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class AttendanceController {
         }
     }
 
+    // Rekapan Absensi per Siswa (hari ini)
     @GetMapping("/history/{studentId}")
     public ResponseEntity<Map<String, Object>> getHistoryByStudent(@PathVariable Long studentId) {
         // Perubahan disini: Tipe datanya sekarang List<Map<String, Object>>
@@ -51,6 +53,7 @@ public class AttendanceController {
         return ResponseEntity.ok(response);
     }
 
+    // Rekapan Absensi Seluruh Siswa (hari ini)
     @GetMapping("/today")
     public ResponseEntity<Map<String, Object>> getTodayAttendance() {
         // Perubahan disini: Tipe datanya sekarang List<Map<String, Object>>
@@ -60,6 +63,31 @@ public class AttendanceController {
         response.put("status", "success");
         response.put("total_hadir", listToday.size());
         response.put("data", listToday);
+        return ResponseEntity.ok(response);
+    }
+
+    // Rekapan Absensi per Siswa (14 hari)
+    @GetMapping("/summary/{studentId}")
+    public ResponseEntity<Map<String, Object>> getAttendanceSummary(@PathVariable Long studentId) {
+        Map<String, Object> summary = attendanceService.getSummary14Days(studentId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("data", summary);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Rekapan Absensi Seluruh Siswa (14 hari)
+    @GetMapping("/summary/all")
+    public ResponseEntity<Map<String, Object>> getAllSummary() {
+        List<Map<String, Object>> allData = attendanceService.getAllStudentsSummary14Days();
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("status", "success");
+        response.put("periode", "14 Hari Terakhir");
+        response.put("data", allData);
+
         return ResponseEntity.ok(response);
     }
 }
